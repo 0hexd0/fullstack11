@@ -1,8 +1,20 @@
 import { Pressable, View, StyleSheet } from "react-native";
 import { Formik } from "formik";
+import { string, object } from 'yup';
 import Text from "./Text";
 import FormikTextInput from "./FormikTextInput";
 import theme from "../theme";
+
+const validationSchema = object().shape({
+  username:
+  string()
+      .min(8, 'username must be at least 8 characters long')
+      .required('Username is required'),
+  password:
+  string()
+      .min(8, 'Password must be at least 8 characters long')
+      .required('Password is required'),
+});
 
 const styles = StyleSheet.create({
   signBtn: {
@@ -44,7 +56,8 @@ const SignIn = () => {
   };
 
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit}>
+    <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}
+    >
       {({ handleSubmit }) => <BodyMassIndexForm onSubmit={handleSubmit} />}
     </Formik>
   );
