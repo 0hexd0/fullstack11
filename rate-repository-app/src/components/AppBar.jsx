@@ -30,18 +30,6 @@ const AppBar = () => {
         <Link to="/signin" style={styles.link}>
           <Text style={styles.text}>Login</Text>
         </Link>
-        <Link to="/signin" style={styles.link}>
-          <Text style={styles.text}>Login</Text>
-        </Link>
-        <Link to="/signin" style={styles.link}>
-          <Text style={styles.text}>Login</Text>
-        </Link>
-        <Link to="/signin" style={styles.link}>
-          <Text style={styles.text}>Login</Text>
-        </Link>
-        <Link to="/signin" style={styles.link}>
-          <Text style={styles.text}>Login</Text>
-        </Link>
       </ScrollView>
     </View>
   );
