@@ -4,15 +4,16 @@ import { string, object } from 'yup';
 import Text from "./Text";
 import FormikTextInput from "./FormikTextInput";
 import theme from "../theme";
+import useSignIn from "../hooks/useSignIn";
 
 const validationSchema = object().shape({
   username:
   string()
-      .min(8, 'username must be at least 8 characters long')
+      .min(3, 'username must be at least 8 characters long')
       .required('Username is required'),
   password:
   string()
-      .min(8, 'Password must be at least 8 characters long')
+      .min(3, 'Password must be at least 8 characters long')
       .required('Password is required'),
 });
 
@@ -51,8 +52,17 @@ const BodyMassIndexForm = ({ onSubmit }) => {
 };
 
 const SignIn = () => {
-  const onSubmit = (values) => {
-    console.log(values);
+  const [signIn] = useSignIn();
+
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+
+    try {
+      const { data } = await signIn({ username, password });
+      console.log(data);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
