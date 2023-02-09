@@ -56,13 +56,19 @@ const AppBar = () => {
         {
           !data.me &&
           <Link to="/signin" style={styles.link}>
-            <Text style={styles.text}>Login</Text>
+            <Text style={styles.text}>Sign in</Text>
+          </Link>
+        }
+        {
+          data.me &&
+          <Link to="/newReview" style={styles.link}>
+            <Text style={styles.text}>Create a review</Text>
           </Link>
         }
         {
           data.me &&
           <Pressable onPress={onLogout}>
-            <Text style={styles.text}>Logout</Text>
+            <Text style={styles.text}>Sign out</Text>
           </Pressable>
         }
       </ScrollView>
