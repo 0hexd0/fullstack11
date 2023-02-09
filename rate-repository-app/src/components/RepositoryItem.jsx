@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
 const RepositoryItem = (props) => {
     const repository = props.repository;
     return (
-        <View style={styles.container}>
+        <View style={styles.container} testID="repositoryItem">
             <View style={styles.header}>
                 <Image
                     style={styles.profile}
