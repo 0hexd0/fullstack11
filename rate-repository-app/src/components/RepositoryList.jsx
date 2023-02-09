@@ -1,11 +1,9 @@
 import { FlatList, View, StyleSheet, Pressable } from "react-native";
 import RepositoryItem from "./RepositoryItem";
-import { useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-native";
 import { Text } from "react-native";
 
-import { GET_REPOSITORIES } from "../graphql/queries";
-import theme from "../theme";
+import useRepositories from "../hooks/useRepositories";
 
 const styles = StyleSheet.create({
   separator: {
@@ -22,7 +20,7 @@ export const RepositoryListContainer = ({ repositories }) => {
     : [];
 
   const handlePress = (repository) => {
-    navigate(`/${repository.id}`)
+    navigate(`/${repository.id}`);
   };
 
   return (
@@ -31,7 +29,7 @@ export const RepositoryListContainer = ({ repositories }) => {
       keyExtractor={(item) => item.id}
       ItemSeparatorComponent={ItemSeparator}
       renderItem={({ item }) => (
-        <Pressable onPress={() =>handlePress(item)}>
+        <Pressable onPress={() => handlePress(item)}>
           <RepositoryItem repository={item} />
         </Pressable>
       )}
@@ -40,9 +38,7 @@ export const RepositoryListContainer = ({ repositories }) => {
 };
 
 const RepositoryList = () => {
-  const { data, loading } = useQuery(GET_REPOSITORIES, {
-    fetchPolicy: "cache-and-network",
-  });
+  const [data, loading] = useRepositories();
 
   if (loading) {
     return (
