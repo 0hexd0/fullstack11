@@ -42,7 +42,7 @@ const RepositoryList = () => {
   }
 
   return (
-    <RepositoryListContainer repositories={data}/>
+    <RepositoryListContainer repositories={data.repositories}/>
   );
 };
 

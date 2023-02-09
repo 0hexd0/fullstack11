@@ -12,11 +12,11 @@ import useAuthStorage from '../hooks/useAuthStorage';
 
 const validationSchema = object().shape({
   username:
-  string()
+    string()
       .min(3, 'username must be at least 8 characters long')
       .required('Username is required'),
   password:
-  string()
+    string()
       .min(3, 'Password must be at least 8 characters long')
       .required('Password is required'),
 });
@@ -39,7 +39,7 @@ const initialValues = {
   password: "",
 };
 
-const BodyMassIndexForm = ({ onSubmit }) => {
+const SignInForm = ({ onSubmit }) => {
   return (
     <View>
       <FormikTextInput name="username" placeholder="Username" />
@@ -54,6 +54,15 @@ const BodyMassIndexForm = ({ onSubmit }) => {
     </View>
   );
 };
+
+export const SignInContainer = ({ initialValues, onSubmit, validationSchema }) => {
+  return (
+    <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}
+    >
+      {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
+    </Formik>
+  )
+}
 
 const SignIn = () => {
   const [signIn] = useSignIn();
@@ -75,10 +84,7 @@ const SignIn = () => {
   };
 
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}
-    >
-      {({ handleSubmit }) => <BodyMassIndexForm onSubmit={handleSubmit} />}
-    </Formik>
+    <SignInContainer initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema} />
   );
 };
 
