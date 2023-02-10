@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-native";
 import { Text } from "react-native";
 
 import useRepositories from "../hooks/useRepositories";
+import ListHeader from "./ListHeader";
 
 const styles = StyleSheet.create({
   separator: {
@@ -24,31 +25,42 @@ export const RepositoryListContainer = ({ repositories }) => {
   };
 
   return (
-    <FlatList
-      data={repositoryNodes}
-      keyExtractor={(item) => item.id}
-      ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => (
-        <Pressable onPress={() => handlePress(item)}>
-          <RepositoryItem repository={item} />
-        </Pressable>
-      )}
-    />
+    <>
+      <FlatList
+        data={repositoryNodes}
+        keyExtractor={(item) => item.id}
+        ItemSeparatorComponent={ItemSeparator}
+        renderItem={({ item }) => (
+          <Pressable onPress={() => handlePress(item)}>
+            <RepositoryItem repository={item} />
+          </Pressable>
+        )}
+      />
+    </>
   );
 };
 
 const RepositoryList = () => {
-  const [data, loading] = useRepositories();
+  const [data, loading, refetch] = useRepositories();
 
-  if (loading) {
-    return (
-      <View>
-        <Text>loading...</Text>
-      </View>
-    );
-  }
+  const handleChoose = (orderBy, orderDirection) => {
+    refetch({
+      orderBy,
+      orderDirection,
+    });
+  };
 
-  return <RepositoryListContainer repositories={data.repositories} />;
+  return (
+    <>
+      <ListHeader onChoose={handleChoose} />
+      {loading && (
+        <View>
+          <Text>loading...</Text>
+        </View>
+      )}
+      {!loading && <RepositoryListContainer repositories={data.repositories} />}
+    </>
+  );
 };
 
 export default RepositoryList;
