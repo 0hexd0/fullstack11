@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { FlatList, View, StyleSheet, Pressable } from "react-native";
-import RepositoryItem from "./RepositoryItem";
 import { useNavigate } from "react-router-native";
 import { Searchbar } from "react-native-paper";
-import Text from "./Text";
 import { useDebounce } from "use-debounce";
+
+import Text from "./Text";
 
 import useRepositories from "../hooks/useRepositories";
 import ListHeader from "./ListHeader";
+import RepositoryItem from "./RepositoryItem";
 
 const styles = StyleSheet.create({
   separator: {
@@ -17,7 +18,7 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-export const RepositoryListContainer = ({ repositories }) => {
+export const RepositoryListContainer = ({ repositories, onEndReach }) => {
   const navigate = useNavigate();
   const repositoryNodes = repositories
     ? repositories.edges.map((edge) => edge.node)
@@ -33,6 +34,8 @@ export const RepositoryListContainer = ({ repositories }) => {
         data={repositoryNodes}
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={ItemSeparator}
+        onEndReached={onEndReach}
+        onEndReachedThreshold={0.5}
         renderItem={({ item }) => (
           <Pressable onPress={() => handlePress(item)}>
             <RepositoryItem repository={item} />
@@ -44,11 +47,17 @@ export const RepositoryListContainer = ({ repositories }) => {
 };
 
 const RepositoryList = () => {
-  const [data, loading, refetch] = useRepositories();
   const [orderBy, setOrderBy] = useState("CREATED_AT");
   const [orderDirection, setOrderDirection] = useState("DESC");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [value] = useDebounce(searchKeyword, 500);
+
+  const { data, loading, refetch, fetchMore } = useRepositories({
+    orderBy,
+    orderDirection,
+    searchKeyword: value,
+    first: 8,
+  });
 
   const onChangeSearch = (query) => setSearchKeyword(query);
 
@@ -58,12 +67,12 @@ const RepositoryList = () => {
   };
 
   useEffect(() => {
-    refetch({
-      orderBy,
-      orderDirection,
-      searchKeyword: value,
-    });
+    refetch();
   }, [orderBy, orderDirection, value]);
+
+  const onEndReach = () => {
+    fetchMore();
+  };
 
   return (
     <>
@@ -79,7 +88,12 @@ const RepositoryList = () => {
           <Text>loading...</Text>
         </View>
       )}
-      {!loading && <RepositoryListContainer repositories={data.repositories} />}
+      {!loading && (
+        <RepositoryListContainer
+          onEndReach={onEndReach}
+          repositories={data.repositories}
+        />
+      )}
     </>
   );
 };

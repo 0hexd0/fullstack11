@@ -110,7 +110,6 @@ const SignUp = () => {
       authStorage.setAccessToken(data.authenticate.accessToken);
       apolloClient.resetStore();
       navigate("/");
-      console.log(data);
     } catch (e) {
       setErrMsg(e.message);
       clearTimeout(timer);
