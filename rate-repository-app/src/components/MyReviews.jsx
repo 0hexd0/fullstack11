@@ -1,19 +1,22 @@
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { FlatList, View, Text } from "react-native";
 import { format, parseISO } from "date-fns";
 import { GET_CURRENT_USER } from "../graphql/queries";
+import { DELETE_REVIEW } from "../graphql/mutations";
 
 import ReviewItem from "./ReviewItem";
 import ItemSeparator from "./ItemSeparator";
 
 const MyReviews = () => {
-  const { data, loading, fetchMore } = useQuery(GET_CURRENT_USER, {
+  const { data, loading, refetch, fetchMore } = useQuery(GET_CURRENT_USER, {
     fetchPolicy: "cache-and-network",
     variables: {
       includeReviews: true,
       first: 1,
     },
   });
+
+  const [mutate] = useMutation(DELETE_REVIEW);
 
   const onEndReach = () => {
     const canFetchMore = !loading && data?.me?.reviews.pageInfo.hasNextPage;
@@ -27,6 +30,15 @@ const MyReviews = () => {
         after: data.me.reviews.pageInfo.endCursor,
       },
     });
+  };
+
+  const onDelete = async (reviewId) => {
+    await mutate({
+      variables: {
+        deleteReviewId: reviewId,
+      },
+    });
+    refetch();
   };
 
   if (loading) {
@@ -53,7 +65,7 @@ const MyReviews = () => {
       onEndReached={onEndReach}
       onEndReachedThreshold={0.5}
       renderItem={({ item }) => (
-        <ReviewItem forCurrentUser={true} review={item} />
+        <ReviewItem forCurrentUser={true} review={item} onDelete={onDelete} />
       )}
     />
   );
