@@ -7,6 +7,7 @@ const useRepositories = () => {
     variables: {
       orderBy: "CREATED_AT",
       orderDirection: "DESC",
+      searchKeyword: "",
     },
   });
 
