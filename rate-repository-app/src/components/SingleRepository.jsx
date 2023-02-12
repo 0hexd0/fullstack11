@@ -4,10 +4,11 @@ import { format, parseISO } from "date-fns";
 import { useQuery } from "@apollo/client";
 import * as Linking from "expo-linking";
 
-import Text from "./Text";
-import RepositoryItem from "./RepositoryItem";
 import { GET_REPOSITORY } from "../graphql/queries";
 import theme from "../theme";
+import Text from "./Text";
+import RepositoryItem from "./RepositoryItem";
+import ReviewItem from "./ReviewItem";
 
 const styles = StyleSheet.create({
   separator: {
@@ -23,38 +24,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
-  reviewItem: {
-    backgroundColor: "#ffffff",
-    display: "flex",
-    flexDirection: "row",
-    padding: 20,
-  },
   repositoryInfo: {
     backgroundColor: "#ffffff",
     marginBottom: 10,
   },
-  rating: {
-    color: theme.colors.primary,
-    borderColor: theme.colors.primary,
-    fontWeight: "bold",
-    textAlign: "center",
-    lineHeight: 36,
-    borderWidth: 2,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 20,
-    fontSize: 16,
-  },
-  username: {
-    fontWeight: "bold",
-  },
-  date: {
-    color: theme.colors.textSecondary,
-    marginTop: 4,
-    marginBottom: 10,
-  },
-  text: {},
 });
 
 const RepositoryInfo = ({ repository }) => {
@@ -73,19 +46,6 @@ const RepositoryInfo = ({ repository }) => {
 };
 
 const ItemSeparator = () => <View style={styles.separator} />;
-
-const ReviewItem = ({ review }) => {
-  return (
-    <View style={styles.reviewItem}>
-      <Text style={styles.rating}>{review.rating}</Text>
-      <View style={{ flexShrink: 1 }}>
-        <Text style={styles.username}>{review.username}</Text>
-        <Text style={styles.date}>{review.date}</Text>
-        <Text style={styles.text}>{review.text}</Text>
-      </View>
-    </View>
-  );
-};
 
 const SingleRepository = () => {
   const { id } = useParams();

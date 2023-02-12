@@ -4,7 +4,7 @@ import Constants from "expo-constants";
 import { Link } from "react-router-native";
 
 import useAuthStorage from "../hooks/useAuthStorage";
-import { GET_ME } from "../graphql/queries";
+import { GET_CURRENT_USER } from "../graphql/queries";
 
 const styles = StyleSheet.create({
   container: {
@@ -28,7 +28,7 @@ const AppBar = () => {
   const authStorage = useAuthStorage();
   const apolloClient = useApolloClient();
 
-  const { data, loading } = useQuery(GET_ME, {
+  const { data, loading } = useQuery(GET_CURRENT_USER, {
     fetchPolicy: "cache-and-network",
   });
 
@@ -64,6 +64,11 @@ const AppBar = () => {
         {data.me && (
           <Link to="/newReview" style={styles.link}>
             <Text style={styles.text}>Create a review</Text>
+          </Link>
+        )}
+        {data.me && (
+          <Link to="/myReviews" style={styles.link}>
+            <Text style={styles.text}>My reviews</Text>
           </Link>
         )}
         {data.me && (

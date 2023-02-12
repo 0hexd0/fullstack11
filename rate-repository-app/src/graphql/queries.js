@@ -32,11 +32,38 @@ export const GET_REPOSITORIES = gql`
   }
 `;
 
-export const GET_ME = gql`
-  query {
+export const GET_CURRENT_USER = gql`
+  query getCurrentUser(
+    $includeReviews: Boolean = false
+    $first: Int
+    $after: String
+  ) {
     me {
+      # user fields...
       id
       username
+      reviews(first: $first, after: $after) @include(if: $includeReviews) {
+        edges {
+          node {
+            # review fields...
+            id
+            text
+            rating
+            createdAt
+            user {
+              id
+              username
+            }
+          }
+          cursor
+        }
+        pageInfo {
+          # page info fields...
+          endCursor
+          startCursor
+          hasNextPage
+        }
+      }
     }
   }
 `;
