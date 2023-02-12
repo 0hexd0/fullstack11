@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
     fontSize: 16,
   },
-  username: {
+  header: {
     fontWeight: "bold",
   },
   date: {
@@ -33,12 +33,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const ReviewItem = ({ review }) => {
+const ReviewItem = ({ review, forCurrentUser = false }) => {
   return (
     <View style={styles.reviewItem}>
       <Text style={styles.rating}>{review.rating}</Text>
       <View style={{ flexShrink: 1 }}>
-        <Text style={styles.username}>{review.username}</Text>
+        <Text style={styles.header}>
+          {forCurrentUser ? review.repository.fullName : review.username}
+        </Text>
         <Text style={styles.date}>{review.date}</Text>
         <Text style={styles.text}>{review.text}</Text>
       </View>

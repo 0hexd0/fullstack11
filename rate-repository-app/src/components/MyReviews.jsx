@@ -52,7 +52,9 @@ const MyReviews = () => {
       ItemSeparatorComponent={ItemSeparator}
       onEndReached={onEndReach}
       onEndReachedThreshold={0.5}
-      renderItem={({ item }) => <ReviewItem review={item} />}
+      renderItem={({ item }) => (
+        <ReviewItem forCurrentUser={true} review={item} />
+      )}
     />
   );
 };
